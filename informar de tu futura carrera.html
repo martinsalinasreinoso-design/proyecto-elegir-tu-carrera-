@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Infórmate de tu futura especialidad</title>
+<style>
+  :root{
+    --amarillo:#f5e14a;
+    --amarillo-suave:#ecd435;
+    --morado:#6a34ce;
+    --morado-suave:#ece3fb;
+    --celeste:#a9e6f2;
+    --celeste-suave:#dff7fb;
+    --naranjo:#f5a86e;
+    --naranjo-suave:#fde3cf;
+    --texto:#222;
+    --fondo:#f7f6f6;
+    --borde:#ccc;
+  }
+
+  *{ box-sizing:border-box; }
+
+  body{
+    margin:0;
+    font-family: Arial, Helvetica, sans-serif;
+    background:var(--fondo);
+    color:var(--texto);
+  }
+
+  header{
+    padding:20px;
+    text-align:center;
+    border-bottom:1px solid var(--borde);
+    background:#fff;
+  }
+
+  header h1{
+    margin:0 0 4px 0;
+    font-size:22px;
+  }
+
+  header p{
+    margin:0;
+    color:#666;
+    font-size:14px;
+  }
+
+  main{
+    max-width:480px;
+    margin:0 auto;
+    padding:20px;
+  }
+
+  .pantalla{
+    display:none;
+  }
+
+  .pantalla.activa{
+    display:block;
+  }
+
+  .btn-volver{
+    background:none;
+    border:1px solid var(--borde);
+    padding:8px 14px;
+    font-size:14px;
+    border-radius:6px;
+    cursor:pointer;
+    margin-bottom:16px;
+  }
+
+  .btn-volver:hover{
+    background:#eee;
+  }
+
+  .titulo-seccion{
+    font-size:20px;
+    margin:0 0 16px 0;
+    text-align:center;
+  }
+
+  .lista-botones{
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+  }
+
+  .boton-especialidad,
+  .boton-menu{
+    display:block;
+    width:100%;
+    text-align:left;
+    padding:16px;
+    font-size:16px;
+    font-weight:bold;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+    color:#222;
+  }
+
+  .boton-especialidad:hover,
+  .boton-menu:hover{
+    filter:brightness(0.95);
+  }
+  .color-contabilidad{ background:var(--amarillo); }
+  .color-rrhh{ background:var(--morado); }
+  .color-logistica{ background:var(--celeste); }
+  .color-redes{ background:var(--naranjo); }
+
+  .caja-contenido{
+    padding:18px;
+    border-radius:8px;
+    font-size:15px;
+    line-height:1.5;
+  }
+
+  .fondo-contabilidad{ background:var(--amarillo-suave); }
+  .fondo-rrhh{ background:var(--morado-suave); }
+  .fondo-logistica{ background:var(--celeste-suave); }
+  .fondo-redes{ background:var(--naranjo-suave); }
+
+  .caja-contenido ul{
+    margin:0;
+    padding-left:20px;
+  }
+
+  .caja-contenido li{
+    margin-bottom:10px;
+  }
+
+  .opinion{
+    margin-bottom:14px;
+    padding-bottom:14px;
+    border-bottom:1px solid rgba(0,0,0,0.1);
+  }
+
+  .opinion:last-child{
+    border-bottom:none;
+    margin-bottom:0;
+    padding-bottom:0;
+  }
+
+  .opinion b{
+    display:block;
+    margin-bottom:4px;
+  }
+
+  .grid-multimedia{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+  }
+
+  .cuadro-multimedia{
+    aspect-ratio:1/1;
+    border:2px dashed var(--borde);
+    border-radius:8px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    font-size:13px;
+    color:#888;
+    overflow:hidden;
+    background:#fff;
+  }
+
+  .cuadro-multimedia img,
+  .cuadro-multimedia video{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Infórmate de tu futura especialidad</h1>
+  <p>Liceo Comercial de Los Andes</p>
+</header>
+
+<main>
+
+  <!-- PANTALLA 1: LISTA DE ESPECIALIDADES -->
+  <section class="pantalla activa" id="pantalla-inicio">
+    <h2 class="titulo-seccion">Especialidades</h2>
+    <div class="lista-botones">
+      <button class="boton-especialidad color-contabilidad" onclick="mostrarMenu('contabilidad')">Contabilidad</button>
+      <button class="boton-especialidad color-rrhh" onclick="mostrarMenu('rrhh')">Administración mención Recursos Humanos</button>
+      <button class="boton-especialidad color-logistica" onclick="mostrarMenu('logistica')">Administración mención Logística</button>
+      <button class="boton-especialidad color-redes" onclick="mostrarMenu('redes')">Conectividad y Redes</button>
+    </div>
+  </section>
+
+  <!-- PANTALLA 2: MENU DE LA ESPECIALIDAD -->
+  <section class="pantalla" id="pantalla-menu">
+    <button class="btn-volver" onclick="mostrarInicio()">&larr; Especialidades</button>
+    <h2 class="titulo-seccion" id="menu-titulo"></h2>
+    <div class="lista-botones" id="menu-botones"></div>
+  </section>
+
+  <!-- PANTALLA 3: CONTENIDO DE UNA SECCION -->
+  <section class="pantalla" id="pantalla-contenido">
+    <button class="btn-volver" onclick="volverAlMenu()">&larr; Volver</button>
+    <h2 class="titulo-seccion" id="contenido-titulo"></h2>
+    <div class="caja-contenido" id="contenido-caja"></div>
+  </section>
+
+</main>
+
+<script>
+const especialidades = {
+
+  contabilidad: {
+    nombre: "Contabilidad",
+    color: "contabilidad",
+    resumen: "La carrera de Contabilidad del Liceo Comercial de Los Andes otorga el título de Contador Técnico de Nivel Medio. Entrega competencias prácticas para procesar registros financieros, usar software contable especializado, cumplir con normas tributarias y realizar trámites legales y mercantiles en empresas públicas o privadas.",
+    especificaciones: [
+      "Duración: 2 años (3° y 4° Medio)",
+      "Perfil: balances, liquidaciones de sueldo, impuestos y registro de transacciones",
+      "Competencias: orden, ética, cálculo numérico y manejo de Excel",
+      "Herramientas: software contable y portal del SII"
+    ],
+    materiales: [
+      "Textos legales y tributarios de la normativa chilena (extractos y guías del SII, leyes laborales y cálculo de remuneraciones)",
+      "Materiales didácticos y de oficina",
+      "Guías de talleres de simulación contable",
+      "Calculadoras científicas y financieras",
+      "Carpetas archivadoras y timbres comerciales para organización simulada de antecedentes tributarios"
+    ],
+    continuacion: [
+      "CFT: convalidación o ingreso directo a programas técnicos superiores en administración y finanzas",
+      "IP: Contador Auditor o Ingeniería de Ejecución en Contabilidad",
+      "Universidades (vía PAES): Contador Auditor, Ingeniería Comercial o Administración de Empresas"
+    ],
+    opiniones: [
+      { texto: "Los egresados destacan una tradición longeva desde 1943 y una fuerte valoración de la formación técnica para el trabajo o la continuación de estudios." }
+    ],
+    fotos: [],
+    videos: []
+  },
+
+  rrhh: {
+    nombre: "Administración mención Recursos Humanos",
+    color: "rrhh",
+    resumen: "La especialidad de Recursos Humanos prepara a los estudiantes para trabajar en la gestión de personas dentro de una empresa. Enseña sobre contratos, remuneraciones, finiquitos, selección de personal, atención a trabajadores y organización administrativa, desarrollando habilidades para desenvolverse en el área laboral.",
+    especificaciones: [
+      "Contratos y documentación laboral: elaboración, revisión y archivo de contratos, anexos, finiquitos y antecedentes de los trabajadores",
+      "Remuneraciones: apoyo en liquidaciones de sueldo, bonos, descuentos, horas extras y cotizaciones previsionales",
+      "Control de asistencia: registro de horarios, atrasos, permisos, licencias médicas, vacaciones y días trabajados",
+      "Reclutamiento y selección: apoyo en publicación de ofertas, revisión de currículums, entrevistas y contratación de personal"
+    ],
+    materiales: [
+      "Carpetas plásticas de palanca (tamaño oficio)",
+      "Lápices pasta de color azul",
+      "Banderitas adhesivas marcadoras (\"Firme aquí\")",
+      "Huellero dactilar",
+      "Corchetera y clips mariposa"
+    ],
+    continuacion: [
+      "Ingeniería en Gestión de Personas – Duoc UC",
+      "Ingeniería en Administración mención Gestión de Personas – Duoc UC",
+      "Ingeniería en Gestión de Personas – AIEP",
+      "Ingeniería en Administración de Empresas mención Recursos Humanos – AIEP",
+      "Administración de Empresas – INACAP"
+    ],
+    opiniones: [
+      { nombre: "Javiera Morales — Egreso 2022", texto: "Lo que más me sirvió de la especialidad fue aprender a hacer contratos, liquidaciones y a trabajar con Excel. En la práctica pude aplicar bastante de lo aprendido." },
+      { nombre: "Sebastián Rojas — Egreso 2023", texto: "Recursos Humanos me ayudó a entender cómo funciona una empresa desde el lado de los trabajadores. La práctica fue donde más aprendí." },
+      { nombre: "Fernanda Soto — Egreso 2024", texto: "Me gustó porque aprendimos cosas que sirven tanto para trabajar como para la vida diaria, especialmente temas de contratos, remuneraciones y derechos laborales." }
+    ],
+    fotos: [],
+    videos: []
+  },
+
+  logistica: {
+    nombre: "Administración mención Logística",
+    color: "logistica",
+    resumen: "La especialidad de Administración Mención Logística capacita a los estudiantes en la gestión estratégica de la cadena de suministro, almacenamiento, transporte y distribución de bienes. El objetivo es formar profesionales capaces de optimizar procesos, controlar inventarios y garantizar el flujo eficiente de productos según los estándares de la industria actual.",
+    especificaciones: [
+      "Duración: 2 años (3° y 4° Medio) / Formación Técnico-Profesional",
+      "Perfil de egreso: control de stock, recepción y despacho de mercancías, gestión de rutas de transporte y uso de software logístico",
+      "Competencias clave: trabajo en equipo, resolución de problemas en cadena de suministro, organización y responsabilidad operacional"
+    ],
+    materiales: [
+      "Carpeta con alcipres (sujetador): para guardar guías y fichas de la especialidad",
+      "Cuaderno y lápices: para tomar apuntes en clase",
+      "Calculadora: para sacar cuentas de inventarios y cargas",
+      "Pendrive: para guardar archivos y presentaciones"
+    ],
+    continuacion: [
+      "Carreras técnicas/profesionales: Técnico en Logística, Ingeniería en Logística y Transporte, Comercio Exterior, Administración de Empresas",
+      "Instituciones: Centros de Formación Técnica (CFT), Institutos Profesionales (IP) y Universidades"
+    ],
+    opiniones: [
+      { nombre: "Camila Soto — Egreso 2022", texto: "La especialidad me dio una base gigante. En mi trabajo actual en el centro de distribución todos los días uso lo que aprendí sobre control de stock." },
+      { nombre: "Lucas Vera — Egreso 2021", texto: "Pude hacer la continuidad de estudios en Ingeniería en Logística sin quedar colgado, la formación del liceo es súper completa." },
+      { nombre: "Matías Fuentealba — Egreso 2023", texto: "Las prácticas con documentos reales y los softwares que nos enseñaron me ayudaron a conseguir trabajo altiro al salir." }
+    ],
+    fotos: [],
+    videos: []
+  },
+
+  redes: {
+    nombre: "Conectividad y Redes",
+    color: "redes",
+    resumen: "Es una carrera enfocada en diseñar, instalar, configurar, administrar y mantener redes de comunicación y sistemas informáticos, asegurando que computadores, servidores, dispositivos y servicios puedan conectarse de forma eficiente y segura. Incluye principalmente conocimientos de redes LAN/WAN, routers y switches, servidores, cableado estructurado, fibra óptica, Wi-Fi, ciberseguridad, sistemas operativos, servicios en la nube y resolución de fallas.",
+    especificaciones: [
+      "Administración de redes: configuración de routers, switches, VLAN, direccionamiento IP y Wi-Fi",
+      "Cableado y telecomunicaciones: cableado estructurado, fibra óptica y enlaces de comunicación",
+      "Servidores y sistemas: Windows Server, Linux, servicios de red y respaldos",
+      "Ciberseguridad: firewalls, control de accesos, protección de redes y detección de amenazas",
+      "Cloud y virtualización: servidores virtuales y servicios en la nube",
+      "Soporte y diagnóstico: detección y solución de problemas de conexión, equipos y servicios",
+      "Diseño de infraestructura: planificación de redes según cantidad de usuarios, tráfico, cobertura y seguridad"
+    ],
+    materiales: [
+      "Kit para RJ45: crimpeadora, pelacables y tester de red",
+      "Conectores RJ45",
+      "Juego de destornilladores Philips y paleta",
+      "Alicate universal y alicate de corte",
+      "Huincha aisladora",
+      "Amarras plásticas",
+      "Multímetro básico",
+      "Pendrive",
+      "Overol",
+      "Guantes de trabajo"
+    ],
+    continuacion: [
+      "Ingeniería en Redes y Telecomunicaciones – Duoc UC, 8 semestres",
+      "Ingeniería en Telecomunicaciones y Servicios Digitales – INACAP, 8 semestres",
+      "Ingeniería en Ciberseguridad – INACAP o Duoc UC",
+      "Ingeniería Civil en Telemática – Universidad de Santiago de Chile",
+      "Ingeniería Civil en Informática y Telecomunicaciones – Universidad Diego Portales",
+      "Ingeniería Civil en Informática – por ejemplo, USACH"
+    ],
+    opiniones: [
+      { nombre: "Matías Rojas — Egreso 2022", texto: "La especialidad me dio una buena base para entender redes, cableado y configuración de equipos. Lo que más me sirvió fueron las actividades prácticas." },
+      { nombre: "Camila Soto — Egreso 2023", texto: "Me gustó porque no es solo teoría. Aprendimos a trabajar con herramientas, hacer cables RJ45 y resolver problemas de conexión." },
+      { nombre: "Benjamín Herrera — Egreso 2021", texto: "Gracias a la especialidad pude llegar mejor preparado a mi práctica profesional y después continuar estudiando en el área de tecnología." },
+      { nombre: "Valentina Morales — Egreso 2024", texto: "Es una buena opción para quienes les gusta la informática y trabajar con computadores y redes. Aprendí bastante trabajando en equipo." },
+      { nombre: "Diego Contreras — Egreso 2025", texto: "Lo que más destaco es la experiencia práctica. Aprendimos desde lo básico hasta configurar redes y distintos dispositivos." }
+    ],
+    fotos: [],
+    videos: []
+  }
+};
+
+const secciones = [
+  { id: "resumen", etiqueta: "Resumen general" },
+  { id: "especificaciones", etiqueta: "Especificaciones" },
+  { id: "videos", etiqueta: "Videos" },
+  { id: "fotos", etiqueta: "Fotos" },
+  { id: "materiales", etiqueta: "Materiales" },
+  { id: "continuacion", etiqueta: "Continuación de estudios" },
+  { id: "opiniones", etiqueta: "Opiniones ex alumnos" }
+];
+
+let especialidadActual = null;
+
+function mostrarPantalla(id){
+  document.querySelectorAll(".pantalla").forEach(p => p.classList.remove("activa"));
+  document.getElementById(id).classList.add("activa");
+}
+
+function mostrarInicio(){
+  especialidadActual = null;
+  mostrarPantalla("pantalla-inicio");
+}
+function mostrarMenu(clave){
+  especialidadActual = clave;
+  const esp = especialidades[clave];
+
+  document.getElementById("menu-titulo").textContent = esp.nombre;
+
+  const contenedor = document.getElementById("menu-botones");
+  contenedor.innerHTML = "";
+
+  secciones.forEach(sec => {
+    const btn = document.createElement("button");
+    btn.className = "boton-menu color-" + esp.color;
+    btn.textContent = sec.etiqueta;
+    btn.onclick = () => mostrarContenido(sec.id);
+    contenedor.appendChild(btn);
+  });
+
+  mostrarPantalla("pantalla-menu");
+}
+
+function volverAlMenu(){
+  mostrarMenu(especialidadActual);
+}
+function mostrarContenido(idSeccion){
+  const esp = especialidades[especialidadActual];
+  const sec = secciones.find(s => s.id === idSeccion);
+
+  document.getElementById("contenido-titulo").textContent = sec.etiqueta;
+
+  const caja = document.getElementById("contenido-caja");
+  caja.className = "caja-contenido fondo-" + esp.color;
+
+  if (idSeccion === "resumen") {
+    caja.innerHTML = "<p>" + esp.resumen + "</p>";
+  } else if (idSeccion === "especificaciones") {
+    caja.innerHTML = listaHTML(esp.especificaciones);
+  } else if (idSeccion === "materiales") {
+    caja.innerHTML = listaHTML(esp.materiales);
+  } else if (idSeccion === "continuacion") {
+    caja.innerHTML = listaHTML(esp.continuacion);
+  } else if (idSeccion === "opiniones") {
+    caja.innerHTML = esp.opiniones.map(op => {
+      const nombre = op.nombre ? "<b>" + op.nombre + "</b>" : "";
+      return "<div class='opinion'>" + nombre + "\"" + op.texto + "\"</div>";
+    }).join("");
+  } else if (idSeccion === "fotos") {
+    caja.innerHTML = multimediaHTML(esp.fotos, "img");
+  } else if (idSeccion === "videos") {
+    caja.innerHTML = multimediaHTML(esp.videos, "video");
+  }
+
+  mostrarPantalla("pantalla-contenido");
+}
+
+function listaHTML(items){
+  return "<ul>" + items.map(i => "<li>" + i + "</li>").join("") + "</ul>";
+}
+function multimediaHTML(archivos, tipo){
+  if (!archivos || archivos.length === 0) {
+    let html = "<div class='grid-multimedia'>";
+    for (let i = 0; i < 4; i++) html += "<div class='cuadro-multimedia'></div>";
+    html += "</div>";
+    return html;
+  }
+
+  let html = "<div class='grid-multimedia'>";
+  archivos.forEach(ruta => {
+    html += tipo === "img"
+      ? "<div class='cuadro-multimedia'><img src='" + ruta + "' alt=''></div>"
+      : "<div class='cuadro-multimedia'><video src='" + ruta + "' controls></video></div>";
+  });
+  html += "</div>";
+  return html;
+}
+</script>
+
+</body>
+</html>
